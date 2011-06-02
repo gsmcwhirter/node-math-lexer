@@ -1,0 +1,19 @@
+{
+    "name": "math-lexer",
+    "version": "0.0.1",
+    "description": "Library to parse mathematical expressions into functions which accept parameters to perform calculations.",
+    "homepage": "https://github.com/gsmcwhirter/node-math-lexer",
+    "author": {
+        "name": "Gregory McWhirter",
+        "email": "greg@ideafreemonoid.org",
+        "url": "http://ideafreemonoid.org"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gsmcwhirter/node-math-lexer.git"
+    },
+    "engines": ["node >= 0.4.7"],
+    "dependencies": {
+        "underscore": ">=1.1.6"
+    }
+}
