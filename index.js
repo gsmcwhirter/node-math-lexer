@@ -111,8 +111,13 @@ var Lexer = module.exports = {
                 else if (_pcount == 0) {
                     var sstr = str.substring(_ptr);
                     if (sstr.match(new RegExp("^(?:"+_lexer._addop+")"))){
-                        _mop = _ptr;
-                        _moptype = "AddOp";
+                        
+                        if (!(_moptype == "AddOp" || _moptype == "MulOp" || _moptype == "PowOp") || 
+                                (str.substring(_mop + 1, _ptr).match(/[^\s]/) &&
+                                    !str.substring(0, _ptr).match(new RegExp("(?:"+_lexer._addop+"|"+_lexer._mulop+"|"+_lexer._powop+")\\s*$")))){
+                            _mop = _ptr;
+                            _moptype = "AddOp";
+                        }
                         _ptr++;
                     }
                     else if (_moptype != "AddOp" && sstr.match(new RegExp("^(?:"+_lexer._mulop+")"))){
