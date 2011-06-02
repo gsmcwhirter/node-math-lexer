@@ -1,5 +1,4 @@
 var sysutil = require('util');
-var us = require('underscore');
 var vm = require('vm');
 
 var Lexer = module.exports = {
@@ -250,7 +249,13 @@ var Lexer = module.exports = {
                         return;
                     }
 
-                    _stack.push([optype, _parseString(_left), _parseString(_right)]);
+                    if (optype == "minus" && !_left.match(/[^\s]/)){
+                        _stack.push(["times", [["idem", "-1"]], _parseString(_right)]);
+                    }
+                    else {
+                        _stack.push([optype, _parseString(_left), _parseString(_right)]);
+                    }
+
                     _state = "Accept";
                     return;
                 },
@@ -366,7 +371,7 @@ var Lexer = module.exports = {
                     _res += "("+_parseStack(item[1])+")";
                 }
                 else if (item.length > 2 || (item[1] && item[1] instanceof Array) ) {
-                    _res += item[0]+"("+(us._(item.slice(1)).map(function (arg){return _parseStack(arg);})).join(",")+")";
+                    _res += item[0]+"("+item.slice(1).map(function (arg){return _parseStack(arg);}).join(",")+")";
                 }
                 else if (item.length == 2) {
                     _res += item[0]+"("+item[1]+")";

@@ -396,3 +396,27 @@ exports["ok-func2"] = function (test){
 exports["bad-func-2"] = function (test){
     test.done();
 }
+
+exports["negative-numbers"] = function (test){
+    var test1 = function (){return mlexer.parseString("-1")};
+    var test2 = function (){return mlexer.parseString("-(a + 3)")};
+    var test3 = function (){return mlexer.parseString("(-a + 3)")};
+
+    test.doesNotThrow(test1, mlexer.ParseError);
+    test.doesNotThrow(test2, mlexer.ParseError);
+    test.doesNotThrow(test3, mlexer.ParseError);
+
+    test.equals(typeof test1(), "function", "test1");
+    test.equals(typeof test2(), "function", "test2");
+    test.equals(typeof test3(), "function", "test3");
+
+    test["throws"](function(){test1()()}, mlexer.CalculationError, "test1");
+    test["throws"](function(){test2()()}, mlexer.CalculationError, "test2");
+    test["throws"](function(){test3()()}, mlexer.CalculationError, "test3");
+
+    test.equals(test1()({a: 1}), -1, "test1");
+    test.equals(test2()({a: 1}), -4, "test2");
+    test.equals(test3()({a: 1}), 2, "test3");
+
+    test.done();
+}
