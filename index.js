@@ -730,9 +730,7 @@ var Lexer = module.exports = {
     },
 
     parseStringRepLatex: function (stringrep){
-        var _resultstr = vm.runInNewContext(stringrep, this._calcLatex);
-
-        return "\\["+_resultstr+"\\]";
+        return vm.runInNewContext(stringrep, this._calcLatex);
     },
 
     _calcLatex: {
