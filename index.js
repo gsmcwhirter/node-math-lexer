@@ -762,7 +762,7 @@ var Lexer = module.exports = {
                 arg1t = arg1[0];
             }
 
-            if (arg2[1] != "+" && arg2[1] != "-" && arg2[1] != "func" && arg1[1] != "i"){
+            if (arg2[1] != "+" && arg2[1] != "-" && arg2[1] != "func" && arg2[1] != "i"){
                 arg2t = " + \\left("+arg2[0]+"\\right)";
             }
             else if (arg2[0][0] == "-"){
@@ -826,10 +826,10 @@ var Lexer = module.exports = {
 
                 return ["-"+arg2[0], "i"];
             }
-            else if (arg1 == "1"){
+            else if (arg1[0] == "1"){
                 return arg2;
             }
-            else if (arg2 == "1"){
+            else if (arg2[0] == "1"){
                 return arg1;
             }
 

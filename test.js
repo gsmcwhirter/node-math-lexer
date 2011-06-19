@@ -459,8 +459,9 @@ exports["strings and latex"] = function (test){
     test.equals(mlexer.parseStringRepLatex(test1()), "-1", "test1");
     test.equals(mlexer.parseStringRepLatex(test2()), "-\\left(\\text{a} + 3\\right)", "test2");
     test.equals(mlexer.parseStringRepLatex(test3()), "-\\text{a} + 3", "test3");
-    test.equals(mlexer.parseStringRepLatex(test4()), "\\left(2 \\cdot \\text{b}\\right) + \\left(-\\left(0.5 \\cdot \\text{a}\\right)\\right)", "test4");
+    test.equals(mlexer.parseStringRepLatex(test4()), "\\left(2 \\cdot \\text{b}\\right) - \\left(0.5 \\cdot \\text{a}\\right)", "test4");
     test.equals(mlexer.parseStringRepLatex(test5()), "\\left(2 \\cdot -3\\right) + \\left(\\left(\\frac{1}{9}\\right)^{-0.5}\\right)", "test5");
+    test.equals(mlexer.parseStringRepLatex("plus(plus(plus(times(idem(1.5),idem(\"kills\")),times(idem(-1),times(idem(0.5),idem(\"deaths\")))),times(idem(1),idem(\"wins\"))),times(idem(-1),times(idem(0.25),idem(\"losses\"))))"), "\\left(1.5 \\cdot \\text{kills}\\right) - \\left(0.5 \\cdot \\text{deaths}\\right) + \\text{wins} - \\left(0.25 \\cdot \\text{losses}\\right)", "test6")
 
     test.done();
 }
