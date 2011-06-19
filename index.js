@@ -753,8 +753,15 @@ var Lexer = module.exports = {
             else if (arg2 == "0"){
                 return arg1;
             }
+
+            if (arg2[0] == "-"){
+                arg2 = " - "+arg2.substring(1);
+            }
+            else {
+                arg2 = " + "+arg2;
+            }
             
-            return "\\left("+arg1+" + "+arg2+"\\right)";
+            return "\\left("+arg1+arg2+"\\right)";
         }
         , minus: function(arg1, arg2){
             if (arg1 == "0" && arg2 == "0"){
@@ -767,7 +774,14 @@ var Lexer = module.exports = {
                 return arg1;
             }
 
-            return "\\left("+arg1+" - "+arg2+"\\right)";
+            if (arg2[0] == "-"){
+                arg2 = " + "+arg2.substring(1);
+            }
+            else {
+                arg2 = " - "+arg2;
+            }
+
+            return "\\left("+arg1+arg2+"\\right)";
         }
         , times: function(arg1, arg2){
             if (arg1 == "-1"){
