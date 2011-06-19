@@ -730,62 +730,101 @@ var Lexer = module.exports = {
     },
 
     parseStringRepLatex: function (stringrep){
-        return vm.runInNewContext(stringrep, this._calcLatex);
+        return (vm.runInNewContext(stringrep, this._calcLatex))[0];
     },
 
     _calcLatex: {
           idem: function(arg1){
             if (!isNaN(parseFloat(arg1)) && isFinite(arg1))
             {
-                return parseFloat(arg1);
+                return [""+parseFloat(arg1), "i"];
             }
 
-            return "\\text{"+arg1+"}";
+            return ["\\text{"+arg1+"}", "i"];
 
         }
         , plus: function(arg1, arg2){
-            if (arg1 == "0" && arg2 == "0"){
-                return "0";
+            var arg1t, arg2t;
+            if (arg1[0] == "0" && arg2[0] == "0"){
+                return ["0", "i"];
             }
-            else if (arg1 == "0"){
+            else if (arg1[0] == "0"){
                 return arg2;
             }
-            else if (arg2 == "0"){
+            else if (arg2[0] == "0"){
                 return arg1;
             }
 
-            if (arg2[0] == "-"){
-                arg2 = " - "+arg2.substring(1);
+            if (arg1[1] != "+" && arg1[1] != "-" && arg1[1] != "func" && arg1[1] != "i"){
+                arg1t = "\\left("+arg1[0]+"\\right)"
             }
             else {
-                arg2 = " + "+arg2;
+                arg1t = arg1[0];
             }
-            
-            return "\\left("+arg1+arg2+"\\right)";
+
+            if (arg2[1] != "+" && arg2[1] != "-" && arg2[1] != "func" && arg1[1] != "i"){
+                arg2t = " + \\left("+arg2[0]+"\\right)";
+            }
+            else if (arg2[0][0] == "-"){
+                arg2t = " - "+arg2[0].substring(1);
+            }
+            else {
+                arg2t = " + "+arg2[0];
+            }
+
+            return [""+arg1t+arg2t, "+"];
         }
         , minus: function(arg1, arg2){
-            if (arg1 == "0" && arg2 == "0"){
-                return "0";
+            var arg1t, arg2t;
+            if (arg1[0] == "0" && arg2[0] == "0"){
+                return ["0", "i"];
             }
             else if (arg1 == "0"){
-                return "-"+arg2;
+                if (arg2[1] != "i" && arg2[1] != "func" && arg2[1] != "pow"){
+                    return ["-\\left("+arg2[0]+"\\right)", "i"]
+                }
+                else if (arg2[0][0] == "-"){
+                    return [arg2[0].substring(1), "i"];
+                }
+
+                return ["-"+arg2[0], "i"];
             }
             else if (arg2 == "0"){
                 return arg1;
             }
 
-            if (arg2[0] == "-"){
-                arg2 = " + "+arg2.substring(1);
+
+            if (arg1[1] == "*"){
+                arg1t = "\\left("+arg1[0]+"\\right)";
             }
             else {
-                arg2 = " - "+arg2;
+                arg1t = arg1[0];
             }
 
-            return "\\left("+arg1+arg2+"\\right)";
+            if (arg2[1] == "pow" || arg2[1] == "func"){
+                arg2t = " - "+arg2[0];
+            }
+            else if (arg2[0][0] == "-"){
+                arg2t = " + "+arg2[0].substring(1);
+            }
+            else {
+                arg2t = " - \\left("+arg2[0]+"\\right)";
+            }
+
+            return [""+arg1t+arg2t, "-"];
         }
         , times: function(arg1, arg2){
-            if (arg1 == "-1"){
-                return "-"+arg2;
+            var arg1t, arg2t;
+
+            if (arg1[0] == "-1"){
+                if (arg2[1] != "i" && arg2[1] != "func" && arg2[1] != "pow"){
+                    return ["-\\left("+arg2[0]+"\\right)", "i"]
+                }
+                else if(arg2[0][0] == "-"){
+                    return [arg2.substring(1), "i"]
+                }
+
+                return ["-"+arg2[0], "i"];
             }
             else if (arg1 == "1"){
                 return arg2;
@@ -794,35 +833,50 @@ var Lexer = module.exports = {
                 return arg1;
             }
 
-            return "\\left("+arg1+" \\cdot "+arg2+"\\right)";
+            if (arg1[1] == "+" || arg1[1] == "-"){
+                arg1t = "\\left("+arg1[0]+"\\right)";
+            }
+            else {
+                arg1t = arg1[0];
+            }
+
+            if (arg2[1] == "+" || arg2[1] == "-"){
+                arg2t = "\\left("+arg2[0]+"\\right)";
+            }
+            else {
+                arg2t = arg2[0];
+            }
+
+            return [arg1t+" \\cdot "+arg2t, "*"];
+
         }
         , div: function(arg1, arg2){
             if (arg2 == "1"){
                 return arg1;
             }
 
-            return "\\left(\\frac{"+arg1+"}{"+arg2+"}\\right)";
+            return ["\\frac{"+arg1[0]+"}{"+arg2[0]+"}", "func"];
         }
         , log: function(arg1, arg2){
-            return "\\log_{"+arg2+"}\\left("+arg1+"\\right)";
+            return ["\\log_{"+arg2[0]+"}\\left("+arg1[0]+"\\right)", "func"];
         }
         , ln: function(arg1){
-            return "\\ln\\left("+arg1+"\\right)";
+            return ["\\ln\\left("+arg1[0]+"\\right)", "func"];
         }
         , pow: function(arg1, arg2){
-            return ""+arg1+"^{"+arg2+"}";
+            return ["\\left("+arg1[0]+"\\right)^{"+arg2[0]+"}", "pow"];
         }
         , exp: function(arg1){
-            return "e^{"+arg1+"}";
+            return ["e^{"+arg1[0]+"}", "pow"];
         }
         , root: function(arg1, arg2){
-            return "\\sqrt["+arg2+"]{"+arg1+"}";
+            return ["\\sqrt["+arg2[0]+"]{"+arg1[0]+"}", "func"];
         }
         , sqrt: function(arg1){
-            return "\\sqrt{"+arg1+"}";
+            return ["\\sqrt{"+arg1[0]+"}", "func"];
         }
         , abs: function(arg1){
-            return "\\left|"+arg1+"\\right|";
+            return ["\\left|"+arg1[0]+"\\right|", "func"];
         }
     },
 

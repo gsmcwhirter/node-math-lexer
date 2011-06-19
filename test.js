@@ -458,9 +458,9 @@ exports["strings and latex"] = function (test){
 
     test.equals(mlexer.parseStringRepLatex(test1()), "-1", "test1");
     test.equals(mlexer.parseStringRepLatex(test2()), "-\\left(\\text{a} + 3\\right)", "test2");
-    test.equals(mlexer.parseStringRepLatex(test3()), "\\left(-\\text{a} + 3\\right)", "test3");
-    test.equals(mlexer.parseStringRepLatex(test4()), "\\left(\\left(2 \\cdot \\text{b}\\right) - \\left(0.5 \\cdot \\text{a}\\right)\\right)", "test4");
-    test.equals(mlexer.parseStringRepLatex(test5()), "\\left(\\left(2 \\cdot -3\\right) + \\left(\\frac{1}{9}\\right)^{-0.5}\\right)", "test5");
+    test.equals(mlexer.parseStringRepLatex(test3()), "-\\text{a} + 3", "test3");
+    test.equals(mlexer.parseStringRepLatex(test4()), "\\left(2 \\cdot \\text{b}\\right) + \\left(-\\left(0.5 \\cdot \\text{a}\\right)\\right)", "test4");
+    test.equals(mlexer.parseStringRepLatex(test5()), "\\left(2 \\cdot -3\\right) + \\left(\\left(\\frac{1}{9}\\right)^{-0.5}\\right)", "test5");
 
     test.done();
 }
