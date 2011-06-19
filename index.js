@@ -729,6 +729,57 @@ var Lexer = module.exports = {
         }
     },
 
+    parseStringRepLatex: function (stringrep){
+        var _resultstr = vm.runInNewContext(stringrep, this._calcLatex);
+
+        return "\\["+_resultstr+"\\]";
+    },
+
+    _calcLatex: {
+          idem: function(arg1){
+            if (!isNaN(parseFloat(arg1)) && isFinite(arg1))
+            {
+                return parseFloat(arg1);
+            }
+
+            return "\\text{"+arg1+"}";
+
+        }
+        , plus: function(arg1, arg2){
+            return "\\left("+arg1+" + "+arg2+"\\right)";
+        }
+        , minus: function(arg1, arg2){
+            return "\\left("+arg1+" - "+arg2+"\\right)";
+        }
+        , times: function(arg1, arg2){
+            return "\\left("+arg1+" \\cdot "+arg2+"\\right)";
+        }
+        , div: function(arg1, arg2){
+            return "\\left(\\frac{"+arg1+"}{"+arg2+"}\\right)";
+        }
+        , log: function(arg1, arg2){
+            return "\\log_{"+arg2+"}\\left("+arg1+"\\right)";
+        }
+        , ln: function(arg1){
+            return "\\ln\\left("+arg1+"\\right)";
+        }
+        , pow: function(arg1, arg2){
+            return ""+arg1+"^{"+arg2+"}";
+        }
+        , exp: function(arg1){
+            return "e^{"+arg1+"}";
+        }
+        , root: function(arg1, arg2){
+            return "\\sqrt["+arg2+"]{"+arg1+"}";
+        }
+        , sqrt: function(arg1){
+            return "\\sqrt{"+arg1+"}";
+        }
+        , abs: function(arg1){
+            return "\\left|"+arg1+"\\right|";
+        }
+    },
+
     ParseError: function (msg){
         msg = msg || "Parse error";
 

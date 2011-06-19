@@ -430,3 +430,37 @@ exports["negative-numbers"] = function (test){
 
     test.done();
 }
+
+exports["strings and latex"] = function (test){
+    var test1 = function (){return mlexer.parseString("-1", true)};
+    var test2 = function (){return mlexer.parseString("-(a + 3)", true)};
+    var test3 = function (){return mlexer.parseString("(-a + 3)", true)};
+    var test4 = function (){return mlexer.parseString("2 * b + -0.5 * a", true)};
+    var test5 = function (){return mlexer.parseString("2 * -3 + (1/9)^-0.5", true)};
+
+    test.doesNotThrow(test1, mlexer.ParseError);
+    test.doesNotThrow(test2, mlexer.ParseError);
+    test.doesNotThrow(test3, mlexer.ParseError);
+    test.doesNotThrow(test4, mlexer.ParseError);
+    test.doesNotThrow(test5, mlexer.ParseError);
+
+    test.equals(typeof test1(), "string", "test1");
+    test.equals(typeof test2(), "string", "test2");
+    test.equals(typeof test3(), "string", "test3");
+    test.equals(typeof test4(), "string", "test4");
+    test.equals(typeof test5(), "string", "test5");
+
+    test.equals(test1(), "times(idem(-1),idem(1))", "test1");
+    test.equals(test2(), "times(idem(-1),(plus(idem(\"a\"),idem(3))))", "test2");
+    test.equals(test3(), "(plus(times(idem(-1),idem(\"a\")),idem(3)))", "test3");
+    test.equals(test4(), "plus(times(idem(2),idem(\"b\")),times(idem(-1),times(idem(0.5),idem(\"a\"))))");
+    test.equals(test5(), "plus(times(idem(2),times(idem(-1),idem(3))),pow((div(idem(1),idem(9))),times(idem(-1),idem(0.5))))", "test5");
+
+    test.equals(mlexer.parseStringRepLatex(test1()), "\\[\\left(-1 \\cdot 1\\right)\\]", "test1");
+    test.equals(mlexer.parseStringRepLatex(test2()), "\\[\\left(-1 \\cdot \\left(\\text{a} + 3\\right)\\right)\\]", "test2");
+    test.equals(mlexer.parseStringRepLatex(test3()), "\\[\\left(\\left(-1 \\cdot \\text{a}\\right) + 3\\right)\\]", "test3");
+    test.equals(mlexer.parseStringRepLatex(test4()), "\\[\\left(\\left(2 \\cdot \\text{b}\\right) + \\left(-1 \\cdot \\left(0.5 \\cdot \\text{a}\\right)\\right)\\right)\\]", "test4");
+    test.equals(mlexer.parseStringRepLatex(test5()), "\\[\\left(\\left(2 \\cdot \\left(-1 \\cdot 3\\right)\\right) + \\left(\\frac{1}{9}\\right)^{\\left(-1 \\cdot 0.5\\right)}\\right)\\]", "test5");
+
+    test.done();
+}
