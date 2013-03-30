@@ -45,3 +45,7 @@ To run them, install nodeunit and then run
     `nodeunit test.js`
 
 Alternatively, just `npm install` and `npm test`.
+
+## License
+
+MIT (see LICENSE file)
