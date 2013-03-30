@@ -1,6 +1,6 @@
 # node-math-lexer
 
-## Description
+[![Build Status](https://travis-ci.org/gsmcwhirter/node-math-lexer.png?branch=master)](https://travis-ci.org/gsmcwhirter/node-math-lexer)
 
 This package parses basic mathematical formulae including variables into functions
 that will accept variable values and calculate results.
@@ -9,7 +9,7 @@ that will accept variable values and calculate results.
 
 You can install this through npm:
     
-    npm install math-lexer
+    `npm install math-lexer`
     
 ##Usage
 
@@ -42,4 +42,6 @@ You can install this through npm:
 Tests that exist are written for Nodeunit.
 To run them, install nodeunit and then run
 
-    nodeunit test.js
+    `nodeunit test.js`
+
+Alternatively, just `npm install` and `npm test`.
